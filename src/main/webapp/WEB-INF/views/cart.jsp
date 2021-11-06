@@ -82,9 +82,9 @@
                     </c:forEach>
                     <b>
                         <fmt:formatNumber type="currency"
-                                         currencySymbol="₫"
-                                         maxFractionDigits="0"
-                                         value="${totalPrice}"/>
+                                          currencySymbol="₫"
+                                          maxFractionDigits="0"
+                                          value="${totalPrice}"/>
                     </b>
                 </td>
             </tr>
