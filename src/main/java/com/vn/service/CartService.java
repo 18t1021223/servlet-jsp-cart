@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class CartService {
 
@@ -34,7 +33,7 @@ public class CartService {
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
                 break;
             case "delete":
-                if(request.getParameter("id") != null) {
+                if (request.getParameter("id") != null) {
                     Arrays.stream(request.getParameterValues("id"))
                             .forEach(this::deleteProduct);
                 }
@@ -55,7 +54,7 @@ public class CartService {
     }
 
     public void addProduct(Product item, int quantity) {
-        String productId = item.getId();
+        String productId = item.getProductId();
         CartItem local = map.get(productId);
         if (local != null) {
             local.setQuantity(local.getQuantity() + 1);

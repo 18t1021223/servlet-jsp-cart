@@ -11,6 +11,16 @@
 <html>
 <head>
     <title>Cart</title>
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script>
+        $(document).ready(function () {
+            $("#select-all").click(function () {
+                $('input[name="id"]:checkbox').not(this).prop('checked', this.checked);
+            });
+        });
+
+    </script>
 </head>
 <body>
 <h1> Cart </h1>
@@ -26,7 +36,7 @@
                 <th>price</th>
                 <th>quantity</th>
                 <th>total</th>
-                <th></th>
+                <th><input type="checkbox" id="select-all"/></th>
             </tr>
 
             <c:forEach var="item" items="${cartSession}">
@@ -34,7 +44,7 @@
                 <tr>
                     <td>${item.key}</td>
                     <td align="center">
-                        <img src="<c:url value="/assets/images/${product.image}"/>" alt="${product.image}">
+                        <img src="<c:url value="/assets/${product.image}"/>" alt="${product.image}">
                     </td>
                     <td>${product.name}</td>
                     <td>${product.price}</td>

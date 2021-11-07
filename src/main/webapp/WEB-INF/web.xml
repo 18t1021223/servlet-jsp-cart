@@ -8,6 +8,11 @@
     </welcome-file-list>
 
     <servlet-mapping>
+        <servlet-name>helloServlet</servlet-name>
+        <url-pattern>/home/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
         <servlet-name>CartController</servlet-name>
         <url-pattern>/cart/*</url-pattern>
     </servlet-mapping>

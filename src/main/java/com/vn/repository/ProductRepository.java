@@ -1,19 +1,33 @@
 package com.vn.repository;
 
+import com.vn.Utils;
 import com.vn.model.Product;
 
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class ProductRepository {
 
-    public List<Product> getAll() {
-        List<Product> products = new ArrayList<>();
-        products.add(new Product("p1", "sản phẩm 1", 50000, "b1.jpg"));
-        products.add(new Product("p2", "sản phẩm 2", 10000, "b2.jpg"));
-        products.add(new Product("p3", "sản phẩm 3", 20000, "b3.jpg"));
-        products.add(new Product("p4", "sản phẩm 4", 25000, "b4.jpg"));
-        products.add(new Product("p5", "sản phẩm 5", 25000, "b5.jpg"));
-        return products;
+    public List<Product> findAll() {
+        String sql = " select top 30 * from sach ";
+        try {
+            Statement statement = ConnectSQL.getInstance().createStatement();
+            return Utils.productMappers(statement.executeQuery(sql));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
+    public Product findById(String id) {
+        String sql = " select * from sach where masach = " + id;
+        try {
+            Statement statement = ConnectSQL.getInstance().createStatement();
+            return Utils.productMapper(statement.executeQuery(sql));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return null;
+        }
     }
 }

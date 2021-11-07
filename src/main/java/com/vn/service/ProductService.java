@@ -13,13 +13,13 @@ public class ProductService {
         productRepository = new ProductRepository();
     }
 
-    public List<Product> getAll() {
-        return productRepository.getAll();
+    public List<Product> findAll() {
+        return productRepository.findAll();
     }
 
     public Product getProduct(HttpServletRequest request) {
         Product p = new Product();
-        p.setId(request.getParameter("id"));
+        p.setProductId(request.getParameter("id"));
         p.setName(request.getParameter("name"));
         p.setImage(request.getParameter("image"));
         p.setPrice(Long.parseLong(request.getParameter("price")));
