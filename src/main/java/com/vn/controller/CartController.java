@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 
-@WebServlet(name = "CartController", value = {"/cart"})
+@WebServlet(name = "CartController", value = {"/cart/*"})
 public class CartController extends HttpServlet {
 
     private CartService cartService;
@@ -24,7 +24,6 @@ public class CartController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         cartService = new CartService((HashMap<String, CartItem>) session.getAttribute("cart"));
-
         session.setAttribute("cart", cartService.process(request, response));
         session.setMaxInactiveInterval(60 * 60 * 24 * 7);
     }

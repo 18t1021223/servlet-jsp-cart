@@ -29,8 +29,8 @@ public class CartService {
         String path = request.getPathInfo().split("[/]", 3)[1];
         switch (path.toLowerCase()) {
             case "add":
-                addProduct(productService.getProduct(request), 1);
-                request.getRequestDispatcher("/index.jsp").forward(request, response);
+                addProduct(productService.findById(request.getParameter("id")), 1);
+                response.sendRedirect(request.getHeader("Referer") == null ? "/home" : request.getHeader("Referer"));
                 break;
             case "delete":
                 if (request.getParameter("id") != null) {

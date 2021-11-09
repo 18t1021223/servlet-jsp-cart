@@ -1,12 +1,15 @@
 package com.vn;
 
+import com.vn.dto.CustomerRequest;
 import com.vn.model.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -85,6 +88,24 @@ public class Utils {
             customer.setCustomerId(rs.getLong("makh"));
             customer.setName(rs.getString("hoten"));
         }
+        return customer;
+    }
+
+    public static CustomerRequest toDto(HttpServletRequest request) {
+        CustomerRequest customer = new CustomerRequest();
+        customer.setPassword(request.getParameter("password"));
+        customer.setRePassword(request.getParameter("rePassword"));
+        customer.setUsername(request.getParameter("username"));
+        customer.setName(request.getParameter("name"));
+        return customer;
+    }
+
+    public static Customer toModel(CustomerRequest customerRequest) {
+        Customer customer = new Customer();
+        customer.setPassword(customerRequest.getPassword());
+        customer.setUsername(customerRequest.getUsername());
+        customer.setName(customerRequest.getName());
+        customer.setCustomerId(new Date().getTime());
         return customer;
     }
     //endregion

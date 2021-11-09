@@ -12,7 +12,35 @@
 <head>
     <title>Cart</title>
     <script src="https://code.jquery.com/jquery-latest.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            margin-top: 20px;
+            background: #eee;
+        }
+
+        .ui-w-40 {
+            width: 40px !important;
+            height: auto;
+        }
+
+        .card {
+            box-shadow: 0 1px 15px 1px rgba(52, 40, 104, .08);
+        }
+
+        .ui-product-color {
+            display: inline-block;
+            overflow: hidden;
+            margin: .144em;
+            width: .875rem;
+            height: .875rem;
+            border-radius: 10rem;
+            -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset;
+            vertical-align: middle;
+        }
+    </style>
     <script>
         $(document).ready(function () {
             $("#select-all").click(function () {
@@ -23,87 +51,125 @@
     </script>
 </head>
 <body>
-<h1> Cart </h1>
-<br>
-<c:set var="cartSession" value="${sessionScope.cart}"/>
-<c:choose>
-    <c:when test="${ cartSession != null && !cartSession.isEmpty() }">
-        <table border="1" width="70%">
-            <tr>
-                <th>id</th>
-                <th>image</th>
-                <th>name</th>
-                <th>price</th>
-                <th>quantity</th>
-                <th>total</th>
-                <th><input type="checkbox" id="select-all"/></th>
-            </tr>
+<div class="container px-3 my-5 clearfix">
+    <!-- Shopping cart table -->
+    <div class="card">
+        <div class="card-header">
+            <h2>Shopping Cart</h2>
+        </div>
+        <c:set var="cartSession" value="${sessionScope.cart}"/>
+        <c:choose>
+            <c:when test="${ cartSession != null && !cartSession.isEmpty() }">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered m-0">
+                            <thead>
+                            <tr>
+                                <!-- Set columns width -->
+                                <th class="text-center py-3 px-4" style="min-width: 400px;">Product Name &amp; Details
+                                </th>
+                                <th class="text-right py-3 px-4" style="width: 100px;">Price</th>
+                                <th class="text-center py-3 px-4" style="width: 120px;">Quantity</th>
+                                <th class="text-right py-3 px-4" style="width: 100px;">Total</th>
+                                <th class="text-center align-middle py-3 px-0" style="width: 40px;">
+                                    <input type="checkbox" id="select-all"/>
+                                </th>
+                            </tr>
+                            </thead>
+                            <c:forEach var="item" items="${cartSession}">
+                                <c:set var="product" value="${item.value.product}"/>
+                                <tr>
+                                    <td class="p-4">
+                                        <div class="media align-items-center">
+                                            <img class="d-block ui-w-40 ui-bordered mr-4"
+                                                 src="<c:url value="/assets/${product.image}"/>" alt="${product.image}">
+                                            <div class="media-body">
+                                                <a href="#" class="d-block text-dark">${product.name}</a>
+                                                <small>
+                                                    <span class="text-muted"><b>Author:</b> ${product.author}</span>
+                                                    <br>
+                                                    <span class="text-muted"><b>Chapter:</b> ${product.numberChapter}</span>
+                                                    <br>
+                                                    <span class="text-muted"><b>Category:</b> ${product.categoryId}</span>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right font-weight-semibold align-middle p-4">
+                                            ${product.price}
+                                    </td>
+                                    <td class="align-middle p-4">
+                                        <input type="hidden" form="formEdit" name="id" value="${item.key}">
+                                        <input type="number" form="formEdit" class="form-control text-center"
+                                               min="1" max="100" name="quantity" value="${item.value.quantity}">
+                                    </td>
+                                    <td class="text-right font-weight-semibold align-middle p-4">
+                                        <fmt:formatNumber type="currency"
+                                                          currencySymbol="₫"
+                                                          maxFractionDigits="0"
+                                                          value="${ item.value.total }"/>
+                                    </td>
+                                    <td class="text-center align-middle px-0">
+                                        <c:url var="deleteItem" value="/cart/delete">
+                                            <c:param name="id" value="${item.key}"/>
+                                        </c:url>
+                                        <input type="checkbox" class="form-control text-center" name="id"
+                                               value="${item.key}" form="formDelete">
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            <tr>
+                                <td colspan="4" align="right">
+                                    <form action="/cart/edit" method="get" id="formEdit">
+                                        <input type="submit" value="update">
+                                    </form>
+                                </td>
+                                <td align="center">
+                                    <form action="/cart/delete" method="get" id="formDelete">
+                                        <input type="submit" value="delete">
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- / Shopping cart table -->
 
-            <c:forEach var="item" items="${cartSession}">
-                <c:set var="product" value="${item.value.product}"/>
-                <tr>
-                    <td>${item.key}</td>
-                    <td align="center">
-                        <img src="<c:url value="/assets/${product.image}"/>" alt="${product.image}">
-                    </td>
-                    <td>${product.name}</td>
-                    <td>${product.price}</td>
-                    <td>
-                        <input type="number" min="1" max="100" name="quantity" value="${item.value.quantity}"
-                               form="formEdit">
-                        <input type="hidden" form="formEdit" name="id" value="${item.key}">
-                    </td>
-                    <td><fmt:formatNumber type="currency"
-                                          currencySymbol="₫"
-                                          maxFractionDigits="0"
-                                          value="${ item.value.total }"/>
-                    </td>
+                    <div class="align-items-center pb-4">
+                        <div class="">
+                            <div class="text-right mt-4">
+                                <label class="text-muted font-weight-normal m-0">Total price</label>
+                                <div class="text-large">
+                                    <strong>
+                                        <c:set var="totalPrice" value="0"/>
+                                        <c:forEach var="item" items="${cartSession.values()}">
+                                            <c:set var="totalPrice" value="${totalPrice + item.total}"/>
+                                        </c:forEach>
+                                        <fmt:formatNumber type="currency"
+                                                          currencySymbol="₫"
+                                                          maxFractionDigits="0"
+                                                          value="${totalPrice}"/>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <td align="center">
-                        <c:url var="deleteItem" value="/cart/delete">
-                            <c:param name="id" value="${item.key}"/>
-                        </c:url>
-                        <input type="checkbox" name="id" value="${item.key}" form="formDelete">
-                    </td>
-                </tr>
-            </c:forEach>
+                    <div class="float-right">
+                        <a href="/home" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Back to shopping</a>
+                        <a href="/user/checkout" class="btn btn-lg btn-primary mt-2">Checkout</a>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <div class="float-right">
+                    <a href="/home" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Back to shopping</a>
+                </div>
+            </c:otherwise>
+        </c:choose>
 
-            <tr>
-                <td colspan="5"><a href="/home">add more</a></td>
-                <td align="center">
-                    <form action="/cart/edit" method="get" id="formEdit">
-                        <input type="submit" value="update">
-                    </form>
-                </td>
-                <td align="center">
-                    <form action="/cart/delete" method="get" id="formDelete">
-                        <input type="submit" value="delete">
-                    </form>
-                </td>
-            </tr>
-            <tr style="height: 50px;">
-                <td colspan="5" align="right">
-                    total price
-                </td>
-                <td colspan="2" align="right">
-                    <c:set var="totalPrice" value="0"/>
-                    <c:forEach var="item" items="${cartSession.values()}">
-                        <c:set var="totalPrice" value="${totalPrice + item.total}"/>
-                    </c:forEach>
-                    <b>
-                        <fmt:formatNumber type="currency"
-                                          currencySymbol="₫"
-                                          maxFractionDigits="0"
-                                          value="${totalPrice}"/>
-                    </b>
-                </td>
-            </tr>
-        </table>
-    </c:when>
-    <c:otherwise>
-        <a href="/home">add more</a>
-    </c:otherwise>
-</c:choose>
+    </div>
+</div>
 
 </body>
 </html>

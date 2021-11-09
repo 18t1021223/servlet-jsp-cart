@@ -3,7 +3,6 @@ package com.vn.service;
 import com.vn.model.Product;
 import com.vn.repository.ProductRepository;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class ProductService {
@@ -17,12 +16,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product getProduct(HttpServletRequest request) {
-        Product p = new Product();
-        p.setProductId(request.getParameter("id"));
-        p.setName(request.getParameter("name"));
-        p.setImage(request.getParameter("image"));
-        p.setPrice(Long.parseLong(request.getParameter("price")));
-        return p;
+    public Product findById(String id) {
+        return productRepository.findById(id);
+    }
+
+    public List<Product> findByCategoryId(String id) {
+        return productRepository.findByCategoryId(id);
     }
 }

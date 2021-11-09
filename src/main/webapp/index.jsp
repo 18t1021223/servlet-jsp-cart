@@ -5,6 +5,6 @@
 <head>
 </head>
 <body>
-<c:redirect url="/home"/>
+<c:redirect url="/product/category"/>
 </body>
 </html>

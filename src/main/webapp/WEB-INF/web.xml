@@ -9,7 +9,8 @@
 
     <servlet-mapping>
         <servlet-name>helloServlet</servlet-name>
-        <url-pattern>/home/*</url-pattern>
+        <url-pattern>/product/*</url-pattern>
+        <url-pattern>/home</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

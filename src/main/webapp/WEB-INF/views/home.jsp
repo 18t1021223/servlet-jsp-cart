@@ -24,18 +24,31 @@
     <div class="container">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Trang chủ</a>
+                <a class="nav-link" href="/">Trang chủ</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Đăng ký</a>
+                <a class="nav-link" href="/guest/register">Đăng ký</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Đăng nhập</a>
-            </li>
+            <c:if test="${user == null}">
+                <li class="nav-item">
+                    <a class="nav-link" href="/guest/login">Đăng nhập</a>
+                </li>
+            </c:if>
+            <c:if test="${user != null}">
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/logout">Đăng xuất</a>
+                </li>
+                <li class="nav-item">
+                    <p class="nav-link">${user.name}</p>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/order">Đơn mua</a>
+                </li>
+            </c:if>
             <li class="nav-item">
                 <a class="nav-link" href="/cart/view" style="font-weight: bold;">
                     <i class="fa fa-shopping-cart" aria-hidden="false"></i>
-                    Giỏ Hàng (0)
+                    Giỏ Hàng (${cart == null ? 0 : cart.size()})
                 </a>
             </li>
         </ul>
@@ -49,7 +62,7 @@
             <p class="lead">CHỦ ĐỀ SÁCH</p>
             <div class="list-group">
                 <c:forEach var="item" items="${categories}">
-                    <a href="${item.categoryId}" class="list-group-item">
+                    <a href="/product/category?categoryId=${item.categoryId}" class="list-group-item">
                             ${item.name}
                     </a>
                 </c:forEach>
@@ -63,7 +76,7 @@
                     <c:forEach var="item" items="${products}">
                         <div class="col-sm-4 col-lg-4 col-md-4" style="margin-bottom: 20px">
                             <div class="thumbnail">
-                                <a href="#" class="text-dark">
+                                <a href="/product?id=${item.productId}" class="text-dark">
                                     <c:if test="${item.image == null}">
                                         <img src="https://i.pinimg.com/564x/f9/11/d3/f911d38579709636499618b6b3d9b6f6.jpg"
                                              width="200" height="226">
@@ -85,9 +98,6 @@
                             </div>
                             <c:url var="addItem" value="/cart/add">
                                 <c:param name="id" value="${item.productId}"/>
-                                <c:param name="name" value="${item.name}"/>
-                                <c:param name="image" value="${item.image}"/>
-                                <c:param name="price" value="${item.price}"/>
                             </c:url>
                             <a href="${addItem}">add to cart</a>
                         </div>
