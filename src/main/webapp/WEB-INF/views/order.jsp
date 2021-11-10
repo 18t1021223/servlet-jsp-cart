@@ -28,64 +28,89 @@
 </head>
 <body>
 <div class="container px-3 my-5 clearfix">
-    <!-- Shopping cart table -->
-    <div class="card">
-        <div class="card-header">
-            <h2>Order</h2>
-        </div>
+    <!-- Order table -->
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header">
+                <h2>Order</h2>
+            </div>
 
-        <div class="card-body">
-            <c:forEach var="item" items="${orders}">
-                <p>${item.order.createDate} - status: ${item.order.status}</p>
-                <div class="table-responsive" style="margin-bottom: 20px;">
-                    <table class="table table-bordered m-0">
-                        <thead>
+            <div class="card-body">
+                <c:forEach var="item" items="${orders}">
+                    <table>
                         <tr>
-                            <!-- Set columns width -->
-                            <th class="text-center py-3 px-4" style="min-width: 400px;">Product id</th>
-                            <th class="text-right py-3 px-4" style="width: 100px;">Quantity</th>
+                            <th>Id</th>
+                            <th>Create date</th>
+                            <th>Total price</th>
+                            <th>Status</th>
                         </tr>
-                        </thead>
-                        <c:forEach var="detail" items="${item.orderDetails}">
-                            <tr>
-                                <td class="text-right font-weight-semibold align-middle p-4">
-                                        ${detail.productId}
-                                </td>
-                                <td class="text-center align-middle px-0">
-                                        ${detail.quantity}
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
+                        <tr>
+                            <td>
+                                <a data-toggle="collapse" href="#order${}" class="collapsed card-link">
+                                        ${}
+                                </a>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </table>
-                </div>
-            </c:forEach>
-
-            <!-- / Shopping cart table -->
-            <div class="align-items-center pb-4">
-                <div class="">
-                    <div class="text-right mt-4">
-                        <label class="text-muted font-weight-normal m-0">Total price</label>
-                        <div class="text-large">
-                            <strong>
-                                <c:set var="totalPrice" value="0"/>
-                                <c:forEach var="item" items="${cartSession.values()}">
-                                    <c:set var="totalPrice" value="${totalPrice + item.total}"/>
-                                </c:forEach>
-                                <fmt:formatNumber type="currency"
-                                                  currencySymbol="₫"
-                                                  maxFractionDigits="0"
-                                                  value="${totalPrice}"/>
-                            </strong>
+                    <%--                    <p>${item.order.createDate} - status: ${item.order.status}</p>--%>
+                    <div id="order${}" class="collapse table-responsive" data-parent="#accordion"
+                         style="margin-bottom: 20px;">
+                        <table class="table table-bordered m-0">
+                            <thead>
+                            <tr>
+                                <!-- Set columns width -->
+                                <th class="text-center py-3 px-4" style="min-width: 400px;">Info</th>
+                                <th class="text-center py-3 px-4" style="min-width: 400px;">Price</th>
+                                <th class="text-right py-3 px-4" style="width: 100px;">Total</th>
+                            </tr>
+                            </thead>
+                            <c:forEach var="detail" items="${item.orderDetails}">
+                                <tr>
+                                    <td class="p-4">
+                                        <div class="media align-items-center">
+                                            <img class="d-block ui-w-40 ui-bordered mr-4"
+                                                 src="<c:url value="/assets/${product.image}"/>" alt="${product.image}">
+                                            <div class="media-body">
+                                                <a href="#" class="d-block text-dark">${product.name}</a>
+                                                <small>
+                                                    <span class="text-muted"><b>x</b> ${soluong}</span>
+                                                    <br>
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-right font-weight-semibold align-middle p-4">
+                                            ${detail.productId}
+                                    </td>
+                                    <td class="text-center align-middle px-0">
+                                            ${detail.quantity}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            </tbody>
+                        </table>
+                        <div class="float-right">
+                            <p class="mt-2">Total price:
+                                <b class="text-danger" style='font-size:27px;'>
+                                    <fmt:formatNumber type="currency"
+                                                      currencySymbol="₫"
+                                                      maxFractionDigits="0"
+                                                      value="${product.price}"/>
+                                </b>
+                            </p>
                         </div>
                     </div>
+                </c:forEach>
+
+                <div class="float-right">
+                    <a href="/home" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Back to shopping</a>
                 </div>
             </div>
-
-            <div class="float-right">
-                <a href="/home" class="btn btn-lg btn-default md-btn-flat mt-2 mr-3">Back to shopping</a>
-            </div>
         </div>
+
     </div>
 </div>
 
