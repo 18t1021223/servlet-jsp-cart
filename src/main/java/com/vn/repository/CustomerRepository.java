@@ -8,12 +8,11 @@ import java.sql.SQLException;
 
 public class CustomerRepository {
 
-    public Customer findByUsernameAndPassword(String username, String password) {
-        String sql = "select * from khachhang where tendn = ? and pass = ? ";
+    public Customer findByUsernameAndPassword(String username) {
+        String sql = "select * from khachhang where tendn = ?";
         try {
             PreparedStatement statement = ConnectSQL.getInstance().prepareStatement(sql);
             statement.setString(1, username);
-            statement.setString(2, password);
             return Utils.customerMapper(statement.executeQuery());
         } catch (SQLException exception) {
             exception.printStackTrace();

@@ -24,6 +24,10 @@
             box-shadow: 0 1px 15px 1px rgba(52, 40, 104, .08);
         }
 
+        div .collapse {
+            display: table-row !important;
+        }
+
     </style>
 </head>
 <body>
@@ -37,26 +41,24 @@
 
             <div class="card-body">
                 <c:forEach var="item" items="${orders}">
-                    <table>
+                    <c:set var="totalPriceOrder" value="0"/>
+                    <table width="50%">
                         <tr>
                             <th>Id</th>
                             <th>Create date</th>
-                            <th>Total price</th>
                             <th>Status</th>
                         </tr>
                         <tr>
                             <td>
-                                <a data-toggle="collapse" href="#order${}" class="collapsed card-link">
-                                        ${}
+                                <a data-toggle="collapse" href="#order${item.orderId}" class="collapsed card-link">
+                                        ${item.orderId}
                                 </a>
                             </td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>${item.createDate}</td>
+                            <td>${item.status}</td>
                         </tr>
                     </table>
-                    <%--                    <p>${item.order.createDate} - status: ${item.order.status}</p>--%>
-                    <div id="order${}" class="collapse table-responsive" data-parent="#accordion"
+                    <div id="order${item.orderId}" class="collapse show table-responsive" data-parent="#accordion"
                          style="margin-bottom: 20px;">
                         <table class="table table-bordered m-0">
                             <thead>
@@ -67,26 +69,32 @@
                                 <th class="text-right py-3 px-4" style="width: 100px;">Total</th>
                             </tr>
                             </thead>
-                            <c:forEach var="detail" items="${item.orderDetails}">
+                            <c:forEach var="detail" items="${item.orderDetailDtoList}">
+                                <c:set var="product" value="${detail.productDto}"/>
                                 <tr>
                                     <td class="p-4">
                                         <div class="media align-items-center">
                                             <img class="d-block ui-w-40 ui-bordered mr-4"
-                                                 src="<c:url value="/assets/${product.image}"/>" alt="${product.image}">
+                                                 src="<c:url value="/assets/${product.image}"/>" alt="${product.image}" width="60">
                                             <div class="media-body">
-                                                <a href="#" class="d-block text-dark">${product.name}</a>
+                                                <a href="/product?id=${product.productId}" class="d-block text-dark">${product.name}</a>
                                                 <small>
-                                                    <span class="text-muted"><b>x</b> ${soluong}</span>
+                                                    <span class="text-muted" style="font-size: 14px"><b>x</b> ${detail.quantity}</span>
                                                     <br>
                                                 </small>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-right font-weight-semibold align-middle p-4">
-                                            ${detail.productId}
+                                            ${product.price}
                                     </td>
                                     <td class="text-center align-middle px-0">
-                                            ${detail.quantity}
+                                        <c:set var="totalPriceOrder"
+                                               value="${detail.quantity * product.price + totalPriceOrder}"/>
+                                        <fmt:formatNumber type="currency"
+                                                          currencySymbol="₫"
+                                                          maxFractionDigits="0"
+                                                          value="${detail.quantity * product.price}"/>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -94,11 +102,11 @@
                         </table>
                         <div class="float-right">
                             <p class="mt-2">Total price:
-                                <b class="text-danger" style='font-size:27px;'>
+                                <b class="text-danger" style='font-size:20px;'>
                                     <fmt:formatNumber type="currency"
                                                       currencySymbol="₫"
                                                       maxFractionDigits="0"
-                                                      value="${product.price}"/>
+                                                      value="${totalPriceOrder}"/>
                                 </b>
                             </p>
                         </div>

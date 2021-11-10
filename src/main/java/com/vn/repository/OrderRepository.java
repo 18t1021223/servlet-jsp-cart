@@ -12,7 +12,7 @@ import java.util.List;
 public class OrderRepository {
 
     public List<Order> findByCustomerId(long customerId) {
-        String sql = "select * from hoadon where makh = '" + customerId + "'";
+        String sql = "select * from hoadon where makh = '" + customerId + "' order by ngaymua desc";
         try {
             Statement statement = ConnectSQL.getInstance().createStatement();
             return Utils.orderMappers(statement.executeQuery(sql));

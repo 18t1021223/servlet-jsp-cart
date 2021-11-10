@@ -3,6 +3,8 @@ package com.vn.service;
 import com.vn.Utils;
 import com.vn.dto.CustomerRequest;
 import com.vn.dto.OrderDetailDto;
+import com.vn.dto.OrderDto;
+import com.vn.dto.ProductDto;
 import com.vn.model.CartItem;
 import com.vn.model.Customer;
 import com.vn.model.Order;
@@ -10,6 +12,9 @@ import com.vn.model.OrderDetail;
 import com.vn.repository.CustomerRepository;
 import com.vn.repository.OrderDetailRepository;
 import com.vn.repository.OrderRepository;
+import com.vn.repository.ProductRepository;
+import org.mindrot.jbcrypt.BCrypt;
+import org.modelmapper.ModelMapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,21 +26,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static org.modelmapper.convention.MatchingStrategies.STANDARD;
+
 public class CustomerService {
     private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
     private final OrderDetailRepository orderDetailRepository;
+    private final ProductRepository productRepository;
+    private ModelMapper modelMapper;
 
     public CustomerService() {
         customerRepository = new CustomerRepository();
         orderDetailRepository = new OrderDetailRepository();
         orderRepository = new OrderRepository();
+        productRepository = new ProductRepository();
+        modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(STANDARD);
     }
 
     public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Customer customer = customerRepository.
-                findByUsernameAndPassword(req.getParameter("username"), req.getParameter("password"));
-        if (customer == null) {
+        Customer customer = customerRepository.findByUsernameAndPassword(req.getParameter("username"));
+        if (customer == null || !BCrypt.checkpw(req.getParameter("password"), customer.getPassword())) {
             req.setAttribute("message", "Tai khoan mat khau sai");
             req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
             return;
@@ -82,7 +93,7 @@ public class CustomerService {
             if (cart != null) {
                 Order order = new Order();
                 order.setOrderId(new Date().getTime());
-                order.setStatus(true);
+                order.setStatus(false);
                 order.setCreateDate(new Date());
                 order.setCustomerId(((Customer) session.getAttribute("user")).getCustomerId());
 
@@ -110,14 +121,25 @@ public class CustomerService {
         }
     }
 
-    public List<OrderDetailDto> getOrder(HttpServletRequest request) {
-        List<OrderDetailDto> response = new ArrayList<>();
+    public List<OrderDto> getOrderHistory(HttpServletRequest request) {
+        List<OrderDto> response = new ArrayList<>();
+
         List<Order> orders = orderRepository.
                 findByCustomerId(((Customer) request.getSession().getAttribute("user")).getCustomerId());
-        orders.forEach(item -> response.add(
-                new OrderDetailDto(item, orderDetailRepository.findByOrderId(item.getOrderId()))
-                )
-        );
+        orders.forEach(item -> {
+            OrderDto orderDto = modelMapper.map(item, OrderDto.class);
+            List<OrderDetailDto> orderDetailDtos = new ArrayList<>();
+            orderDetailRepository.findByOrderId(item.getOrderId())
+                    .forEach(i -> {
+                        ProductDto productDto = modelMapper
+                                .map(productRepository.findById(i.getProductId()), ProductDto.class);
+                        OrderDetailDto orderDetailDto = modelMapper.map(i, OrderDetailDto.class);
+                        orderDetailDto.setProductDto(productDto);
+                        orderDetailDtos.add(orderDetailDto);
+                    });
+            orderDto.setOrderDetailDtoList(orderDetailDtos);
+            response.add(orderDto);
+        });
         return response;
     }
 }
