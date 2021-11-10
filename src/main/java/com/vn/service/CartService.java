@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.vn.constant.Constant.PATH_VIEW_USER;
+
 public class CartService {
 
     private ProductService productService;
@@ -37,7 +39,7 @@ public class CartService {
                     Arrays.stream(request.getParameterValues("id"))
                             .forEach(this::deleteProduct);
                 }
-                request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);
+                request.getRequestDispatcher(PATH_VIEW_USER + "cart.jsp").forward(request, response);
                 break;
 
             case "edit":
@@ -47,7 +49,7 @@ public class CartService {
                     editProduct(ids[i], Integer.parseInt(quantity[i]));
                 }
             case "view":
-                request.getRequestDispatcher("/WEB-INF/views/cart.jsp").forward(request, response);
+                request.getRequestDispatcher(PATH_VIEW_USER + "cart.jsp").forward(request, response);
                 break;
         }
         return map;

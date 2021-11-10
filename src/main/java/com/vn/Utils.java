@@ -1,5 +1,6 @@
 package com.vn;
 
+import com.vn.constant.vo.AdminRole;
 import com.vn.dto.CustomerRequest;
 import com.vn.model.*;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -73,7 +75,9 @@ public class Utils {
             admin = new Admin();
             admin.setUsername(rs.getString("tendangnhap"));
             admin.setPassword(rs.getString("matkhau"));
-            admin.setRole(rs.getString("quyen"));
+            admin.setRole(Arrays.stream(rs.getString("quyen").split("[;]"))
+                    .map(AdminRole::valueOf)
+                    .toArray(AdminRole[]::new));
         }
         return admin;
     }

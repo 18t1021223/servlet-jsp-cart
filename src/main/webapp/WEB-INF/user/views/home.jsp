@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <!-- Custom CSS -->
-    <link href="<c:url value="/assets/css/shop-homepage.css"/>" rel="stylesheet"/>
+    <link href="<c:url value="/assets/user/css/shop-homepage.css"/>" rel="stylesheet"/>
 </head>
 <body class="bg-light">
 <!-- Navigation -->
@@ -82,7 +82,7 @@
                                              width="200" height="226">
                                     </c:if>
                                     <c:if test="${item.image != null}">
-                                        <img src="<c:url value="/assets/${item.image}"/>" width="200">
+                                        <img src="<c:url value="/assets/user/${item.image}"/>" width="200">
                                     </c:if>
                                     <div>
                                         <br/>

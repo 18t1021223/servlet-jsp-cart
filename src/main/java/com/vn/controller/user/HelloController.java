@@ -1,4 +1,4 @@
-package com.vn.controller;
+package com.vn.controller.user;
 
 import com.vn.service.CategoryService;
 import com.vn.service.ProductService;
@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+
+import static com.vn.constant.Constant.PATH_VIEW_USER;
 
 @WebServlet(name = "helloServlet", value = {"/product/*", "/home"})
 public class HelloController extends HttpServlet {
@@ -31,10 +33,10 @@ public class HelloController extends HttpServlet {
                     categoryId == null ? productService.findAll() : productService.findByCategoryId(categoryId)
             );
             request.setAttribute("categories", categoryService.findAll());
-            request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
+            request.getRequestDispatcher(PATH_VIEW_USER + "home.jsp").forward(request, response);
         } else if (request.getRequestURI().startsWith("/product")) {
             request.setAttribute("product", productService.findById(request.getParameter("id")));
-            request.getRequestDispatcher("/WEB-INF/views/product_detail.jsp").forward(request, response);
+            request.getRequestDispatcher(PATH_VIEW_USER + "product_detail.jsp").forward(request, response);
         }
     }
 }

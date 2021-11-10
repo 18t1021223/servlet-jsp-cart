@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter(filterName = "UserFilter", urlPatterns = {"/cart/*"})
+@WebFilter(filterName = "UserFilter", urlPatterns = {"/cart/*","/order/*"})
 public class UserFilter implements Filter {
 
     public void init(FilterConfig config) throws ServletException {

@@ -1,4 +1,4 @@
-package com.vn.controller;
+package com.vn.controller.user;
 
 import com.vn.service.CustomerService;
 
@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.vn.constant.Constant.PATH_VIEW_ADMIN;
+import static com.vn.constant.Constant.PATH_VIEW_USER;
 
 @WebServlet(name = "CustomerController", urlPatterns = {"/guest/*"})
 public class GuestController extends HttpServlet {
@@ -21,17 +24,25 @@ public class GuestController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if (req.getRequestURI().contains("/login")) {
-            req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+        if (req.getRequestURI().contains("/admin/login")) {
+            req.getRequestDispatcher(PATH_VIEW_ADMIN + "login.jsp").forward(req, resp);
+        } else if (req.getRequestURI().contains("/admin/register")) {
+            req.getRequestDispatcher(PATH_VIEW_ADMIN + "register.jsp").forward(req, resp);
+        } else if (req.getRequestURI().contains("/login")) {
+            req.getRequestDispatcher(PATH_VIEW_USER + "login.jsp").forward(req, resp);
         } else if (req.getRequestURI().contains("/register")) {
-            req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
+            req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            if (req.getRequestURI().contains("/login")) {
+            if (req.getRequestURI().contains("/admin/login")) {
+
+            } else if (req.getRequestURI().contains("/admin/register")) {
+
+            } else if (req.getRequestURI().contains("/login")) {
                 customerService.login(req, resp);
             } else if (req.getRequestURI().contains("/register")) {
                 customerService.register(req, resp);

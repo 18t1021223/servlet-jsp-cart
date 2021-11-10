@@ -1,4 +1,4 @@
-package com.vn.controller;
+package com.vn.controller.user;
 
 import com.vn.model.CartItem;
 import com.vn.service.CartService;

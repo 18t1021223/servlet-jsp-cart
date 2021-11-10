@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class CustomerRepository {
 
-    public Customer findByUsernameAndPassword(String username) {
+    public Customer findByUsername(String username) {
         String sql = "select * from khachhang where tendn = ?";
         try {
             PreparedStatement statement = ConnectSQL.getInstance().prepareStatement(sql);

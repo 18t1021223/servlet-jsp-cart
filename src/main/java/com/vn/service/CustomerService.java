@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.vn.constant.Constant.PATH_VIEW_USER;
 import static org.modelmapper.convention.MatchingStrategies.STANDARD;
 
 public class CustomerService {
@@ -45,10 +46,10 @@ public class CustomerService {
     }
 
     public void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Customer customer = customerRepository.findByUsernameAndPassword(req.getParameter("username"));
+        Customer customer = customerRepository.findByUsername(req.getParameter("username"));
         if (customer == null || !BCrypt.checkpw(req.getParameter("password"), customer.getPassword())) {
             req.setAttribute("message", "Tai khoan mat khau sai");
-            req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+            req.getRequestDispatcher(PATH_VIEW_USER + "login.jsp").forward(req, resp);
             return;
         }
         HttpSession session = req.getSession();
@@ -61,22 +62,22 @@ public class CustomerService {
         CustomerRequest customerRequest = Utils.toDto(req);
         if (customerRequest.getUsername() == null || customerRequest.getUsername().isEmpty()) {
             req.setAttribute("message", "Điền tai khoan");
-            req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
+            req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
             return;
         }
         if (customerRequest.getPassword() == null || customerRequest.getPassword().isEmpty()) {
             req.setAttribute("message", "Điền mật khẩu");
-            req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
+            req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
             return;
         } else if (!customerRequest.getPassword().equals(customerRequest.getRePassword())) {
             req.setAttribute("message", "Xác thực mật khẩu thất bại");
-            req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
+            req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
             return;
         }
         Customer customer = Utils.toModel(customerRequest);
         if (!customerRepository.insertCustomer(customer)) {
             req.setAttribute("message", "Tạo tài khoản thất bại");
-            req.getRequestDispatcher("/WEB-INF/views/register.jsp").forward(req, resp);
+            req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
             return;
         }
         login(req, resp);

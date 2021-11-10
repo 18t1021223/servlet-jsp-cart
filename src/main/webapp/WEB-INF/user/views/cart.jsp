@@ -82,7 +82,7 @@
                                     <td class="p-4">
                                         <div class="media align-items-center">
                                             <img class="d-block ui-w-40 ui-bordered mr-4"
-                                                 src="<c:url value="/assets/${product.image}"/>" alt="${product.image}">
+                                                 src="<c:url value="/assets/user/${product.image}"/>" alt="${product.image}">
                                             <div class="media-body">
                                                 <a href="/product?id=${product.productId}" class="d-block text-dark">${product.name}</a>
                                                 <small>
