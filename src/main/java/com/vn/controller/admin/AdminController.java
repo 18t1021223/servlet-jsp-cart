@@ -1,5 +1,6 @@
 package com.vn.controller.admin;
 
+import com.vn.constant.vo.AdminRole;
 import com.vn.service.AdminService;
 
 import javax.servlet.ServletException;
@@ -25,9 +26,12 @@ public class AdminController extends HttpServlet {
         if (request.getRequestURI().equals("/admin/login")) {
             request.getRequestDispatcher(PATH_VIEW_ADMIN + "login.jsp").forward(request, response);
         } else if (request.getRequestURI().equals("/admin/register")) {
+            request.setAttribute("roles", AdminRole.values());
             request.getRequestDispatcher(PATH_VIEW_ADMIN + "register.jsp").forward(request, response);
         } else if (request.getRequestURI().equals("/admin/index")) {
             request.getRequestDispatcher(PATH_VIEW_ADMIN + "index.jsp").forward(request, response);
+        }else if (request.getRequestURI().equals("/admin/logout")) {
+            adminService.logout(request, response);
         }
     }
 
@@ -36,10 +40,7 @@ public class AdminController extends HttpServlet {
         if (request.getRequestURI().equals("/admin/login")) {
             adminService.login(request, response);
         } else if (request.getRequestURI().equals("/admin/register")) {
-            // TODO
-            request.getRequestDispatcher(PATH_VIEW_ADMIN + "register.jsp").forward(request, response);
-        } else if (request.getRequestURI().equals("/admin/logout")) {
-            adminService.logout(request, response);
+            adminService.register(request,response);
         }
     }
 }

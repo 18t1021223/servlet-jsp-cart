@@ -26,8 +26,15 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/">Trang chủ</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/guest/register">Đăng ký</a>
+            <li class="nav-item active dropdown">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="/guest/register">
+                    Đăng ký
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/guest/register">User</a></li>
+                    <li><a href="/admin/register">Admin</a></li>
+                </ul>
             </li>
             <c:if test="${user == null}">
                 <li class="nav-item">

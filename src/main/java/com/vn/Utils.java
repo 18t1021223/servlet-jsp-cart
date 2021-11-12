@@ -1,6 +1,7 @@
 package com.vn;
 
 import com.vn.constant.vo.AdminRole;
+import com.vn.dto.AdminRequest;
 import com.vn.dto.CustomerRequest;
 import com.vn.model.*;
 import lombok.AccessLevel;
@@ -96,7 +97,7 @@ public class Utils {
         return customer;
     }
 
-    public static CustomerRequest toDto(HttpServletRequest request) {
+    public static CustomerRequest customerRequestToDto(HttpServletRequest request) {
         CustomerRequest customer = new CustomerRequest();
         customer.setPassword(request.getParameter("password"));
         customer.setRePassword(request.getParameter("rePassword"));
@@ -105,7 +106,7 @@ public class Utils {
         return customer;
     }
 
-    public static Customer toModel(CustomerRequest customerRequest) {
+    public static Customer DtoToModel(CustomerRequest customerRequest) {
         Customer customer = new Customer();
         customer.setPassword(BCrypt.hashpw(customerRequest.getPassword(), BCrypt.gensalt()));
         customer.setUsername(customerRequest.getUsername());
@@ -142,6 +143,29 @@ public class Utils {
             list.add(order);
         }
         return list;
+    }
+    //endregion
+
+    //region admin
+    public static AdminRequest adminRequestToDto(HttpServletRequest request) {
+        AdminRequest adminRequest = new AdminRequest();
+        adminRequest.setPassword(request.getParameter("password"));
+        adminRequest.setRePassword(request.getParameter("rePassword"));
+        adminRequest.setUsername(request.getParameter("username"));
+        if (request.getParameterValues("role") != null) {
+            adminRequest.setRoles(Arrays.stream(request.getParameterValues("role"))
+                    .map(i -> AdminRole.valueOf(i.toUpperCase()))
+                    .toArray(AdminRole[]::new));
+        }
+        return adminRequest;
+    }
+
+    public static Admin DtoToModel(AdminRequest adminRequest) {
+        Admin admin = new Admin();
+        admin.setPassword(BCrypt.hashpw(adminRequest.getPassword(), BCrypt.gensalt()));
+        admin.setUsername(adminRequest.getUsername());
+        admin.setRole(adminRequest.getRoles());
+        return admin;
     }
     //endregion
 }

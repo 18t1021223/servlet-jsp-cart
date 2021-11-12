@@ -59,7 +59,7 @@ public class CustomerService {
     }
 
     public void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        CustomerRequest customerRequest = Utils.toDto(req);
+        CustomerRequest customerRequest = Utils.customerRequestToDto(req);
         if (customerRequest.getUsername() == null || customerRequest.getUsername().isEmpty()) {
             req.setAttribute("message", "Điền tai khoan");
             req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
@@ -74,7 +74,7 @@ public class CustomerService {
             req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
             return;
         }
-        Customer customer = Utils.toModel(customerRequest);
+        Customer customer = Utils.DtoToModel(customerRequest);
         if (!customerRepository.insertCustomer(customer)) {
             req.setAttribute("message", "Tạo tài khoản thất bại");
             req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
