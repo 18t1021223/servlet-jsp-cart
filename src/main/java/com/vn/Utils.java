@@ -2,6 +2,7 @@ package com.vn;
 
 import com.vn.constant.vo.AdminRole;
 import com.vn.dto.AdminRequest;
+import com.vn.dto.CategoryDto;
 import com.vn.dto.CustomerRequest;
 import com.vn.dto.ProductDto;
 import com.vn.model.*;
@@ -79,6 +80,13 @@ public class Utils {
             list.add(category);
         }
         return list;
+    }
+
+    public static CategoryDto categoryRequestToDto(HttpServletRequest request) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setCategoryId(request.getParameter("categoryId"));
+        categoryDto.setName(request.getParameter("name"));
+        return categoryDto;
     }
     //endregion
 
