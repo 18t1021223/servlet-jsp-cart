@@ -3,6 +3,7 @@ package com.vn;
 import com.vn.constant.vo.AdminRole;
 import com.vn.dto.AdminRequest;
 import com.vn.dto.CustomerRequest;
+import com.vn.dto.ProductDto;
 import com.vn.model.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,18 @@ public class Utils {
             product.setAuthor(rs.getString("tacgia"));
         }
         return product;
+    }
+
+    public static ProductDto ProductRequestToDto(HttpServletRequest request) {
+        ProductDto productDto = new ProductDto();
+        productDto.setAuthor(request.getParameter("author"));
+        productDto.setPrice(Long.parseLong(request.getParameter("price")));
+        productDto.setName(request.getParameter("name"));
+        productDto.setImage(request.getParameter("image"));
+        productDto.setNumberChapter(Integer.parseInt(request.getParameter("chapter")));
+        productDto.setCategoryId(request.getParameter("categoryId"));
+        productDto.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+        return productDto;
     }
     //endregion
 
