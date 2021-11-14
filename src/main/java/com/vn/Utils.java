@@ -180,6 +180,18 @@ public class Utils {
         }
         return list;
     }
+
+    public static Order orderMapper(ResultSet rs) throws SQLException {
+        if (rs.next()) {
+            Order order = new Order();
+            order.setOrderId(rs.getLong("mahoadon"));
+            order.setCustomerId(rs.getLong("makh"));
+            order.setCreateDate(rs.getDate("ngaymua"));
+            order.setStatus(rs.getBoolean("damua"));
+            return order;
+        }
+        return null;
+    }
     //endregion
 
     //region admin
