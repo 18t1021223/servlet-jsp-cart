@@ -16,7 +16,8 @@ import java.util.List;
         "/admin/product/*",
         "/admin/category/*",
         "/admin/customer/*",
-        "/admin/order/*"
+        "/admin/order/*",
+        "/admin/register/*"
 })
 public class RoleFilter implements Filter {
 
@@ -24,7 +25,8 @@ public class RoleFilter implements Filter {
             "/admin/product/add",
             "/admin/customer/add",
             "/admin/category/add",
-            "/admin/order/add"
+            "/admin/order/add",
+            "/admin/register"
     );
 
     private final List<String> urlDelete = Arrays.asList(
@@ -53,40 +55,44 @@ public class RoleFilter implements Filter {
         HttpSession session = request.getSession();
         Admin admin = (Admin) session.getAttribute("admin");
         boolean rs = true;
-        if (urlAdd.contains(request.getRequestURI())) {
-            for (AdminRole item : admin.getRole()) {
-                if (item.name().equalsIgnoreCase(AdminRole.FULL + "") ||
-                        item.name().equalsIgnoreCase(AdminRole.CREATE + "")
-                ) {
-                    chain.doFilter(request, response);
-                    return;
+        try {
+            if (urlAdd.contains(request.getRequestURI())) {
+                for (AdminRole item : admin.getRole()) {
+                    if (item.name().equalsIgnoreCase(AdminRole.FULL + "") ||
+                            item.name().equalsIgnoreCase(AdminRole.CREATE + "")
+                    ) {
+                        chain.doFilter(request, response);
+                        return;
+                    }
                 }
-            }
-            rs = false;
-        } else if (urlUpdate.contains(request.getRequestURI())) {
-            for (AdminRole item : admin.getRole()) {
-                if (item.name().equalsIgnoreCase(AdminRole.FULL + "") ||
-                        item.name().equalsIgnoreCase(AdminRole.UPDATE + "")
-                ) {
-                    chain.doFilter(request, response);
-                    return;
+                rs = false;
+            } else if (urlUpdate.contains(request.getRequestURI())) {
+                for (AdminRole item : admin.getRole()) {
+                    if (item.name().equalsIgnoreCase(AdminRole.FULL + "") ||
+                            item.name().equalsIgnoreCase(AdminRole.UPDATE + "")
+                    ) {
+                        chain.doFilter(request, response);
+                        return;
+                    }
                 }
-            }
-            rs = false;
-        } else if (urlDelete.contains(request.getRequestURI())) {
-            for (AdminRole item : admin.getRole()) {
-                if (item.name().equalsIgnoreCase(AdminRole.FULL + "") ||
-                        item.name().equalsIgnoreCase(AdminRole.DELETE + "")
-                ) {
-                    chain.doFilter(request, response);
-                    return;
+                rs = false;
+            } else if (urlDelete.contains(request.getRequestURI())) {
+                for (AdminRole item : admin.getRole()) {
+                    if (item.name().equalsIgnoreCase(AdminRole.FULL + "") ||
+                            item.name().equalsIgnoreCase(AdminRole.DELETE + "")
+                    ) {
+                        chain.doFilter(request, response);
+                        return;
+                    }
                 }
+                rs = false;
             }
-            rs = false;
-        }
-        if (!rs) {
-            resp.setCharacterEncoding("UTF-8");
-            response.getWriter().println("<html><body> <p>Khong co quyen</p> </body></html>");
+            if (!rs) {
+                resp.setCharacterEncoding("UTF-8");
+                response.getWriter().println("<html><body> <p>Khong co quyen</p> </body></html>");
+                return;
+            }
+        } catch (Exception e) {
             return;
         }
         chain.doFilter(request, response);
