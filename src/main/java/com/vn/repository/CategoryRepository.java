@@ -43,7 +43,7 @@ public class CategoryRepository {
     }
 
     public void deleteCategory(String id) {
-        String sql = "delete loai where = ?";
+        String sql = "delete from loai where maloai = ?";
         Connection connection = ConnectSQL.getInstance();
         try {
             connection.setAutoCommit(false);
@@ -59,5 +59,36 @@ public class CategoryRepository {
         } finally {
             ConnectSQL.setAutocommit(connection, true);
         }
+    }
+
+    public Category findById(String id) {
+        String sql = "select * from loai where maloai = '" + id + "'";
+        try {
+            Statement statement = ConnectSQL.getInstance().createStatement();
+            return Utils.categoryMappers(statement.executeQuery(sql)).get(0);
+        } catch (SQLException exception) {
+            return null;
+        }
+    }
+
+    public boolean updateCategory(Category category) {
+        String sql = "update loai set tenloai = ? where maloai = ? ";
+        Connection connection = ConnectSQL.getInstance();
+        try {
+            connection.setAutoCommit(false);
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(2, category.getCategoryId());
+            statement.setString(1, category.getName());
+            if (statement.executeUpdate() == 1) {
+                connection.commit();
+                return true;
+            }
+            connection.rollback();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectSQL.setAutocommit(connection, true);
+        }
+        return false;
     }
 }

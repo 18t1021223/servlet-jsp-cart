@@ -35,9 +35,10 @@ public class AdminFilter implements Filter {
         }
 
         if (admin == null) {
-            ((HttpServletResponse) response).sendRedirect("/guest/admin/login");
+            ((HttpServletResponse) response).sendRedirect("/admin/login");
             return;
         }
+
         chain.doFilter(request, response);
     }
 

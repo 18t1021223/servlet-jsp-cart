@@ -1,14 +1,10 @@
 package com.vn.model;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@Builder
 public class Product {
 
     private String productId;

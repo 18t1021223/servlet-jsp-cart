@@ -13,10 +13,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Utils {
@@ -59,13 +56,18 @@ public class Utils {
 
     public static ProductDto ProductRequestToDto(HttpServletRequest request) {
         ProductDto productDto = new ProductDto();
+        productDto.setProductId(request.getParameter("productId"));
         productDto.setAuthor(request.getParameter("author"));
         productDto.setPrice(Long.parseLong(request.getParameter("price")));
         productDto.setName(request.getParameter("name"));
         productDto.setImage(request.getParameter("image"));
-        productDto.setNumberChapter(Integer.parseInt(request.getParameter("chapter")));
+        productDto.setNumberChapter(Integer.parseInt(request.getParameter("numberChapter")));
         productDto.setCategoryId(request.getParameter("categoryId"));
         productDto.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+        if (productDto.getProductId() == null) {
+            productDto.setProductId(UUID.randomUUID().toString());
+        }
+        productDto.setCreateDate(new Date());
         return productDto;
     }
     //endregion
@@ -86,6 +88,9 @@ public class Utils {
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setCategoryId(request.getParameter("categoryId"));
         categoryDto.setName(request.getParameter("name"));
+        if (categoryDto.getCategoryId() == null) {
+            categoryDto.setCategoryId(UUID.randomUUID().toString());
+        }
         return categoryDto;
     }
     //endregion
@@ -118,21 +123,31 @@ public class Utils {
         return customer;
     }
 
+    public static List<Customer> customerMappers(ResultSet rs) throws SQLException {
+        List<Customer> list = new ArrayList<>();
+        while (rs.next()) {
+            Customer customer = new Customer();
+            customer.setUsername(rs.getString("tendn"));
+            customer.setPassword(rs.getString("pass"));
+            customer.setCustomerId(rs.getLong("makh"));
+            customer.setName(rs.getString("hoten"));
+            list.add(customer);
+        }
+        return list;
+    }
+
     public static CustomerRequest customerRequestToDto(HttpServletRequest request) {
         CustomerRequest customer = new CustomerRequest();
+        if (request.getParameter("customerId") == null) {
+            customer.setCustomerId(System.currentTimeMillis());
+        } else {
+            customer.setCustomerId(Long.parseLong(request.getParameter("customerId")));
+        }
         customer.setPassword(request.getParameter("password"));
         customer.setRePassword(request.getParameter("rePassword"));
         customer.setUsername(request.getParameter("username"));
         customer.setName(request.getParameter("name"));
-        return customer;
-    }
 
-    public static Customer DtoToModel(CustomerRequest customerRequest) {
-        Customer customer = new Customer();
-        customer.setPassword(BCrypt.hashpw(customerRequest.getPassword(), BCrypt.gensalt()));
-        customer.setUsername(customerRequest.getUsername());
-        customer.setName(customerRequest.getName());
-        customer.setCustomerId(new Date().getTime());
         return customer;
     }
     //endregion

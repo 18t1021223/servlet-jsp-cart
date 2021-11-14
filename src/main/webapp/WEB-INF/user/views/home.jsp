@@ -27,18 +27,23 @@
                 <a class="nav-link" href="/">Trang chủ</a>
             </li>
             <li class="nav-item active dropdown">
-                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="/guest/register">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="<c:url value="/guest/register"/>">
                     Đăng ký
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="/guest/register">User</a></li>
-                    <li><a href="/admin/register">Admin</a></li>
+                    <li><a href="<c:url value="/guest/register"/>">User</a></li>
+                    <li><a href="<c:url value="/admin/register"/>">Admin</a></li>
                 </ul>
             </li>
             <c:if test="${user == null}">
-                <li class="nav-item">
-                    <a class="nav-link" href="/guest/login">Đăng nhập</a>
+                <li class="nav-item active dropdown">
+                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="/guest/login">Đăng nhập</a>
+                    <span class="caret"></span>
+                    <ul class="dropdown-menu">
+                        <li><a href="/guest/login">User</a></li>
+                        <li><a href="/admin/login">Admin</a></li>
+                    </ul>
                 </li>
             </c:if>
             <c:if test="${user != null}">

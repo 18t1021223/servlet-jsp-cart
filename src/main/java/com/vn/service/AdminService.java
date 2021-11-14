@@ -58,6 +58,10 @@ public class AdminService {
             req.setAttribute("message", "Chọn quyền");
             req.getRequestDispatcher(PATH_VIEW_ADMIN + "register.jsp").forward(req, resp);
             return;
+        } else if (adminRepository.findByUsername(adminRequest.getUsername()) != null) {
+            req.setAttribute("message", "Tài khoan da ton tai");
+            req.getRequestDispatcher(PATH_VIEW_ADMIN + "register.jsp").forward(req, resp);
+            return;
         }
         Admin admin = Utils.DtoToModel(adminRequest);
         if (!adminRepository.insertAdmin(admin)) {

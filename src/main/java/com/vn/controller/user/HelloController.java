@@ -30,7 +30,7 @@ public class HelloController extends HttpServlet {
         if (request.getRequestURI().startsWith("/product/category") || request.getRequestURI().startsWith("/home")) {
             String categoryId = request.getParameter("categoryId");
             request.setAttribute("products",
-                    categoryId == null ? productService.findAll() : productService.findByCategoryId(categoryId)
+                    categoryId == null ? productService.findAll(30) : productService.findByCategoryId(categoryId, 30)
             );
             request.setAttribute("categories", categoryService.findAll());
             request.getRequestDispatcher(PATH_VIEW_USER + "home.jsp").forward(request, response);

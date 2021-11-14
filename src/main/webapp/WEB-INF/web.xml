@@ -23,4 +23,30 @@
         <servlet-name>AdminController</servlet-name>
         <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>GuestController</servlet-name>
+        <url-pattern>/guest/*</url-pattern>
+    </servlet-mapping>
+
+
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern/>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>UserFilter</filter-name>
+        <url-pattern/>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern/>
+    </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>RoleFilter</filter-name>
+        <url-pattern/>
+    </filter-mapping>
 </web-app>

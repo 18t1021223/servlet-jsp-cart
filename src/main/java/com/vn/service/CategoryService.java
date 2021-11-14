@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.UUID;
 
 public class CategoryService {
     private CategoryRepository categoryRepository = new CategoryRepository();
@@ -22,12 +21,11 @@ public class CategoryService {
         try {
             CategoryDto dto = Utils.categoryRequestToDto(request);
             Category category = mapper.map(dto, Category.class);
-            category.setCategoryId(UUID.randomUUID().toString());
             if (!categoryRepository.insertCategory(category)) {
                 throw new RuntimeException();
             }
         } catch (Exception e) {
-            request.setAttribute("messsage", "Them loai that bai");
+            request.setAttribute("message", "Thêm loai thất bại");
             return false;
         }
         return true;
@@ -35,5 +33,22 @@ public class CategoryService {
 
     public void deleteCategory(HttpServletRequest request) {
         categoryRepository.deleteCategory(request.getParameter("categoryId"));
+    }
+
+    public Category findById(String id) {
+        return categoryRepository.findById(id);
+    }
+
+    public boolean updateCategory(HttpServletRequest request) {
+        try {
+            CategoryDto categoryDto = Utils.categoryRequestToDto(request);
+            Category category = categoryRepository.findById(categoryDto.getCategoryId());
+            if (category != null && categoryRepository.updateCategory(mapper.map(categoryDto, Category.class))) {
+                return true;
+            }
+        } catch (Exception exception) {
+            request.setAttribute("message", "Sửa loai thất bại");
+        }
+        return false;
     }
 }

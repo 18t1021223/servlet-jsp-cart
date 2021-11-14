@@ -74,7 +74,8 @@ public class CustomerService {
             req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
             return;
         }
-        Customer customer = Utils.DtoToModel(customerRequest);
+        Customer customer = modelMapper.map(customerRequest, Customer.class);
+        customer.setPassword(BCrypt.hashpw(customerRequest.getPassword(), BCrypt.gensalt()));
         if (!customerRepository.insertCustomer(customer)) {
             req.setAttribute("message", "Tạo tài khoản thất bại");
             req.getRequestDispatcher(PATH_VIEW_USER + "register.jsp").forward(req, resp);
@@ -142,5 +143,55 @@ public class CustomerService {
             response.add(orderDto);
         });
         return response;
+    }
+
+    public Customer findById(long id) {
+        return customerRepository.findById(id);
+    }
+
+
+    public List<Customer> findAll() {
+        return customerRepository.findAll();
+    }
+
+    public boolean insertCustomer(HttpServletRequest request) {
+        try {
+            CustomerRequest dto = Utils.customerRequestToDto(request);
+            if (customerRepository.findByUsername(dto.getUsername()) != null) {
+                request.setAttribute("message", "Khách hàng đã tồn tại");
+                return false;
+            }
+            dto.setPassword(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt()));
+            if (!customerRepository.insertCustomer(modelMapper.map(dto, Customer.class))) {
+                request.setAttribute("message", "Thêm khach hang thất bại");
+                return false;
+            }
+            return true;
+        } catch (Exception exception) {
+            request.setAttribute("message", "Thêm khach hang thất bại");
+            return false;
+        }
+    }
+
+    public void deleteCustomer(HttpServletRequest req) {
+        customerRepository.deleteCustomer(Long.parseLong(req.getParameter("id")));
+    }
+
+    public boolean updateCustomer(HttpServletRequest request) {
+        try {
+            CustomerRequest dto = Utils.customerRequestToDto(request);
+            if (customerRepository.findByUsername(dto.getUsername()) == null) {
+                request.setAttribute("message", "khach hang khong ton tai");
+                return false;
+            }
+            if (!customerRepository.updateCustomer(modelMapper.map(dto, Customer.class))) {
+                request.setAttribute("message", "sửa khach hang that bai");
+                return false;
+            }
+            return true;
+        } catch (Exception exception) {
+            request.setAttribute("message", "sửa khach hang that bai");
+        }
+        return false;
     }
 }
