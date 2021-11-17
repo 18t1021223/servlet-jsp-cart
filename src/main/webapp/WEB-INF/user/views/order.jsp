@@ -55,7 +55,14 @@
                                 </a>
                             </td>
                             <td>${item.createDate}</td>
-                            <td>${item.status}</td>
+                            <td>
+                                <c:if test="${item.status}">
+                                    Đã xác nhận
+                                </c:if>
+                                <c:if test="${item.status == false}">
+                                    Chờ xác nhận
+                                </c:if>
+                            </td>
                         </tr>
                     </table>
                     <div id="order${item.orderId}" class="collapse show table-responsive" data-parent="#accordion"
@@ -75,11 +82,14 @@
                                     <td class="p-4">
                                         <div class="media align-items-center">
                                             <img class="d-block ui-w-40 ui-bordered mr-4"
-                                                 src="<c:url value="/assets/user/${product.image}"/>" alt="${product.image}" width="60">
+                                                 src="<c:url value="/assets/user/${product.image}"/>"
+                                                 alt="${product.image}" width="60">
                                             <div class="media-body">
-                                                <a href="/product?id=${product.productId}" class="d-block text-dark">${product.name}</a>
+                                                <a href="/product?id=${product.productId}"
+                                                   class="d-block text-dark">${product.name}</a>
                                                 <small>
-                                                    <span class="text-muted" style="font-size: 14px"><b>x</b> ${detail.quantity}</span>
+                                                    <span class="text-muted"
+                                                          style="font-size: 14px"><b>x</b> ${detail.quantity}</span>
                                                     <br>
                                                 </small>
                                             </div>
@@ -98,7 +108,6 @@
                                     </td>
                                 </tr>
                             </c:forEach>
-                            </tbody>
                         </table>
                         <div class="float-right">
                             <p class="mt-2">Total price:

@@ -48,6 +48,7 @@
                                 </tfoot>
                                 <tbody>
                                 <c:forEach var="item" items="${orders}">
+                                    <c:set var="totalPriceOrder" value="0"/>
                                     <tr>
                                         <td>
                                             <a data-toggle="modal" href="#order${item.orderId}">
@@ -97,7 +98,7 @@
                                                                  src="<c:url value="/assets/user/${product.image}"/>"
                                                                  alt="${product.image}" width="60">
                                                             <div class="media-body">
-                                                                <a href="/product?id=${product.productId}"
+                                                                <a href="<c:url value="/product?id=${product.productId}"/>"
                                                                    class="d-block text-dark">${product.name}</a>
                                                                 <small>
                                                                     <span class="text-muted" style="font-size: 14px">
